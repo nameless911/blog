@@ -1,0 +1,46 @@
+---
+import { CATEGORIES, type Category } from '../consts';
+
+interface Props {
+	// The category being shown; omit for "すべて"
+	current?: Category;
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const categories = Object.entries(CATEGORIES) as [Category, string][];
+---
+
+<nav class="category-nav">
+	<a href={`${base}/blog.html`} class:list={{ active: !current }}>すべて</a>
+	{categories.map(([label, slug]) => (
+		<a href={`${base}/category/${slug}.html`} class:list={{ active: current === label }}>
+			{label}
+		</a>
+	))}
+</nav>
+<style>
+	.category-nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin-bottom: 2rem;
+	}
+	.category-nav a {
+		padding: 0.2em 0.8em;
+		border: 1px solid rgb(var(--gray));
+		border-radius: 999px;
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+		font-size: 0.9em;
+	}
+	.category-nav a:hover {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.category-nav a.active {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: rgb(var(--bg));
+	}
+</style>
